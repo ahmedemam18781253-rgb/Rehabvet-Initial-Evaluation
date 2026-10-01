@@ -199,4 +199,14 @@ document.getElementById('h2slot').replaceWith(document.querySelector('header').c
 applyTpl('ivdd');
 [['pn','pn2'],['on','on2']].forEach(([a,b])=>{const s=document.getElementById(a),d=document.getElementById(b);s.addEventListener('input',()=>d.textContent=s.value||'–')});
 function clearAll(){if(!confirm('Clear all fields?'))return;document.querySelectorAll('input[type=text],input[type=date],textarea').forEach(e=>{e.value='';if(e.tagName==='TEXTAREA')e.style.height=''});document.getElementById('tpl').value='ivdd';applyTpl('ivdd');['pn2','on2'].forEach(i=>document.getElementById(i).textContent='–');document.querySelectorAll('input[type=checkbox],input[type=radio]').forEach(e=>e.checked=false)}
+</script><script>
+document.addEventListener('keydown',e=>{const t=e.target;if(t.tagName!=='INPUT'||t.type!=='text'||!t.closest('td'))return;const k=e.key;
+if(!/^(Arrow(Left|Right|Up|Down)|Enter)$/.test(k)||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey)return;
+const tb=t.closest('table'),all=[...tb.querySelectorAll('td input[type=text]')],i=all.indexOf(t);let n=null;
+if(k==='ArrowRight'){if(t.selectionEnd!==t.value.length)return;n=all[i+1]}
+else if(k==='ArrowLeft'){if(t.selectionStart!==0)return;n=all[i-1]}
+else{const rows=[...tb.rows],d=k==='ArrowUp'?-1:1,cx=c=>{const b=c.getBoundingClientRect();return b.left+b.width/2},x=cx(t);
+let r=rows.indexOf(t.closest('tr'))+d;
+while(rows[r]){const ins=[...rows[r].querySelectorAll('td input[type=text]')];if(ins.length){n=ins.reduce((a,b)=>Math.abs(cx(b)-x)<Math.abs(cx(a)-x)?b:a);break}r+=d}}
+if(!n)return;e.preventDefault();n.focus();n.select()});
 </script></body></html>
